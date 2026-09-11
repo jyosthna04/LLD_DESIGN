@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${problem.title} + ' - History'">History</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+<header>
+    <a th:href="@{/problems}">DesignLoop</a>
+</header>
+<main>
+    <p><a th:href="@{'/problems/' + ${problem.id}}">&larr; Back to problem details</a></p>
+    <h1 th:text="${problem.title} + ' — History'">History</h1>
+
+    <div class="card" th:if="${attempts.isEmpty()}">
+        <p>No attempts yet for this problem.</p>
+        <a class="btn" th:href="@{'/problems/' + ${problem.id}}">Start Practice</a>
+    </div>
+
+    <table th:if="${!attempts.isEmpty()}">
+        <tr>
+            <th>Attempt</th>
+            <th>Status</th>
+            <th>Score</th>
+            <th></th>
+        </tr>
+        <tr th:each="a : ${attempts}">
+            <td th:text="'Attempt ' + ${a.attemptNumber}">Attempt 1</td>
+            <td><span class="badge" th:classappend="'status-' + ${a.status}" th:text="${a.status}">STATUS</span></td>
+            <td th:text="${evaluations[a.id] != null ? evaluations[a.id].overallScore + '/100' : '-'}">-</td>
+            <td><a th:href="@{'/attempts/' + ${a.id} + '/feedback'}">View Feedback</a></td>
+        </tr>
+    </table>
+
+    <div style="margin-top:20px;">
+        <a class="btn" th:href="@{'/problems/' + ${problem.id}}">Try Again</a>
+    </div>
+</main>
+</body>
+</html>

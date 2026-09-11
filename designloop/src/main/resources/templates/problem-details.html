@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${problem.title} + ' - DesignLoop'">Problem</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+<header>
+    <a th:href="@{/problems}">DesignLoop</a>
+</header>
+<main>
+    <p><a th:href="@{/problems}">&larr; Back to problems</a></p>
+
+    <div class="card">
+        <span class="badge"
+              th:classappend="${problem.difficulty == 'Easy' ? 'easy' : (problem.difficulty == 'Medium' ? 'medium' : 'hard')}"
+              th:text="${problem.difficulty}">Easy</span>
+        <h1 th:text="${problem.title}">Parking Lot</h1>
+        <p th:text="${problem.description}">Description</p>
+
+        <h2>Requirements</h2>
+        <p style="white-space: pre-line;" th:text="${problem.requirements}">Requirements</p>
+
+        <h2>Important things to consider</h2>
+        <p>Make sure your design includes clear classes for the core concepts of this problem, and explain how they relate to each other. Think about which class is responsible for what.</p>
+
+        <form th:action="@{'/problems/' + ${problem.id} + '/start'}" method="post" style="margin-top:20px;">
+            <button class="btn" type="submit">Start Practice</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>

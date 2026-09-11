@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>DesignLoop - Something went wrong</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+<header>
+    <a th:href="@{/problems}">DesignLoop</a>
+</header>
+<main>
+    <div class="card">
+        <h1>Oops!</h1>
+        <p th:text="${message}">An error occurred.</p>
+        <a class="btn" th:href="@{/problems}">Back to Problems</a>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${problem.title} + ' - Practice'">Practice</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+<header>
+    <a th:href="@{/problems}">DesignLoop</a>
+</header>
+<main>
+    <p><a th:href="@{'/problems/' + ${problem.id}}">&larr; Back to problem details</a></p>
+
+    <div class="notice" th:if="${param.saved != null}">Your draft was saved.</div>
+
+    <h1 th:text="'Practice: ' + ${problem.title}">Practice</h1>
+    <p class="hint" th:text="'Attempt #' + ${attempt.attemptNumber}">Attempt #1</p>
+
+    <div class="card">
+        <form th:action="@{'/attempts/' + ${attempt.id} + '/submit'}" method="post" id="designForm">
+
+            <label>Classes &amp; Responsibilities</label>
+            <p class="hint">One class per line, in the format: <code>ClassName: what it is responsible for</code></p>
+            <textarea name="classesText" rows="6" placeholder="ParkingLot: manages slots and issues tickets&#10;Vehicle: represents a parked vehicle&#10;Ticket: records entry time and vehicle info" th:text="${submission.classesText}"></textarea>
+
+            <label>Interfaces (optional)</label>
+            <p class="hint">One interface per line, e.g. <code>PaymentStrategy: defines how payment is processed</code></p>
+            <textarea name="interfacesText" rows="3" th:text="${submission.interfacesText}"></textarea>
+
+            <label>Relationships</label>
+            <p class="hint">How do your classes connect? e.g. <code>ParkingLot has many Slots. Slot holds one Vehicle.</code></p>
+            <textarea name="relationshipsText" rows="4" th:text="${submission.relationshipsText}"></textarea>
+
+            <label>Design Explanation</label>
+            <p class="hint">Briefly explain your overall approach.</p>
+            <textarea name="explanationText" rows="4" th:text="${submission.explanationText}"></textarea>
+
+            <label>Trade-offs</label>
+            <p class="hint">What did you simplify or trade off, and why?</p>
+            <textarea name="tradeoffsText" rows="3" th:text="${submission.tradeoffsText}"></textarea>
+
+            <div style="margin-top:20px;">
+                <button class="btn secondary" type="submit"
+                        th:onclick="|this.form.action='/attempts/${attempt.id}/save'|">Save Draft</button>
+                <button class="btn" type="submit">Submit for Feedback</button>
+            </div>
+        </form>
+    </div>
+</main>
+</body>
+</html>

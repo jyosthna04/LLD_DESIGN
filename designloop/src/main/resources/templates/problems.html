@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>DesignLoop - Problems</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+<header>
+    <a th:href="@{/problems}">DesignLoop</a>
+    <div class="tagline">Practice LLD. Submit your design. Understand why it works — and how to make it better.</div>
+</header>
+<main>
+    <h1>Practice Problems</h1>
+    <p>Pick a problem below to start practicing Low-Level Design.</p>
+
+    <div class="card" th:each="problem : ${problems}">
+        <span class="badge"
+              th:classappend="${problem.difficulty == 'Easy' ? 'easy' : (problem.difficulty == 'Medium' ? 'medium' : 'hard')}"
+              th:text="${problem.difficulty}">Easy</span>
+        <h2 style="margin-top:4px;" th:text="${problem.title}">Parking Lot</h2>
+        <p th:text="${problem.description}">Description</p>
+        <a class="btn" th:href="@{'/problems/' + ${problem.id}}">View Details</a>
+        <a class="btn secondary" th:href="@{'/problems/' + ${problem.id} + '/history'}">History</a>
+    </div>
+</main>
+</body>
+</html>

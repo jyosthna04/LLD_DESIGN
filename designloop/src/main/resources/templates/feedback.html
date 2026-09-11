@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${problem.title} + ' - Feedback'">Feedback</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+<header>
+    <a th:href="@{/problems}">DesignLoop</a>
+</header>
+<main>
+    <p><a th:href="@{'/problems/' + ${problem.id}}">&larr; Back to problem details</a></p>
+
+    <h1 th:text="${problem.title} + ' — Feedback'">Feedback</h1>
+    <span class="badge" th:classappend="'status-' + ${attempt.status}" th:text="${attempt.status}">STATUS</span>
+
+    <!-- Case 1: evaluation failed -->
+    <div class="card" th:if="${attempt.status.name() == 'FAILED'}">
+        <p><strong>Evaluation could not be completed this time.</strong></p>
+        <p>Don't worry — your submission was saved safely. You can retry evaluation below.</p>
+        <form th:action="@{'/attempts/' + ${attempt.id} + '/retry'}" method="post">
+            <button class="btn" type="submit">Retry Evaluation</button>
+        </form>
+    </div>
+
+    <!-- Case 2: evaluation is not ready yet (still evaluating / not submitted) -->
+    <div class="card" th:if="${evaluation == null and attempt.status.name() != 'FAILED'}">
+        <p>No feedback yet. <a th:href="@{'/attempts/' + ${attempt.id} + '/practice'}">Go to the practice page</a> to submit your design.</p>
+    </div>
+
+    <!-- Case 3: evaluation is ready -->
+    <div th:if="${evaluation != null}">
+
+        <div class="notice" th:if="${!evaluation.aiAvailable}">
+            <p>AI feedback was unavailable when this was evaluated, so the score and feedback below are based on code checks only.</p>
+            <form th:action="@{'/attempts/' + ${attempt.id} + '/retry'}" method="post">
+                <button class="btn" type="submit">Retry AI Evaluation</button>
+            </form>
+        </div>
+
+        <div class="card" style="text-align:center;">
+            <div class="score-circle" th:text="${evaluation.overallScore}">72</div>
+            <p style="margin-top:10px;">Overall Score</p>
+        </div>
+
+        <div class="card section-strengths" th:if="${!evaluation.strengthsList.isEmpty()}">
+            <h2>✅ Strengths</h2>
+            <ul class="feedback-list">
+                <li th:each="line : ${evaluation.strengthsList}" th:text="${line}">Strength</li>
+            </ul>
+        </div>
+
+        <div class="card section-problems" th:if="${!evaluation.problemsFoundList.isEmpty()}">
+            <h2>⚠️ Problems</h2>
+            <ul class="feedback-list">
+                <li th:each="line : ${evaluation.problemsFoundList}" th:text="${line}">Problem</li>
+            </ul>
+        </div>
+
+        <div class="card section-suggestions" th:if="${!evaluation.suggestionsList.isEmpty()}">
+            <h2>💡 Suggestions</h2>
+            <ul class="feedback-list">
+                <li th:each="line : ${evaluation.suggestionsList}" th:text="${line}">Suggestion</li>
+            </ul>
+        </div>
+
+        <div class="card" th:if="${!evaluation.missingRequirementsList.isEmpty()}">
+            <h2>Missing Requirements</h2>
+            <ul class="feedback-list">
+                <li th:each="line : ${evaluation.missingRequirementsList}" th:text="${line}">Missing</li>
+            </ul>
+        </div>
+
+        <div class="card" th:if="${evaluation.tradeoffsNote != null and !evaluation.tradeoffsNote.isBlank()}">
+            <h2>Possible Trade-offs</h2>
+            <p th:text="${evaluation.tradeoffsNote}">Trade-offs</p>
+        </div>
+
+        <div style="margin-top:20px;">
+            <a class="btn" th:href="@{'/problems/' + ${problem.id}}">Try Again</a>
+            <a class="btn secondary" th:href="@{'/problems/' + ${problem.id} + '/history'}">View History</a>
+        </div>
+    </div>
+</main>
+</body>
+</html>
